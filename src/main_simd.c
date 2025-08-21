@@ -48,6 +48,13 @@ int main() {
          end_time - start_time);
   free(matrix_a);
   free(matrix_b);
+  FILE *file = fopen("Metodo_bucket_SIMD ", "w");
+  for (size_t x = 0; x < N; x++) {
+    for (size_t y = 0; y < N; y++) {
+      fwrite(&matrix_c[x][y], sizeof(int), 1, file);
+    }
+  }
+
   free(matrix_c);
   return 0;
 }

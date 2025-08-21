@@ -1,4 +1,5 @@
 #include "matrix_functions.h"
+#include <stddef.h>
 #include <stdlib.h>
 
 void fill_random_matrix(int matrix[N][N]) {
