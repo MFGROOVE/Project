@@ -1,0 +1,63 @@
+#+TITLE: Projeto de Implementação Paralela - Multiplicação de Matrizes
+#+AUTHOR: Marcelo Gulart
+#+REPOSITORY: https://github.com/MFGROOVE/Project
+
+* Estrutura do Projeto
+#+BEGIN_SRC text
+Project/
+├── src/
+│   ├── main.c
+│   ├── main_id.c
+│   ├── main_id_simd.c
+│   ├── main_bucket.c
+│   └── main_bucket_simd.c
+├── include/
+│   └── matrix_functions.h
+├── build/
+│   └── (arquivos compilados)
+├── CMakeLists.txt
+└── notes.org
+#+END_SRC
+
+* Versões Implementadas
+** 1. Serial
+   - Implementação sequencial tradicional com três loops aninhados
+   - Base para comparação de desempenho
+
+** 2. OpenMP - Versão Buckets
+   - Distribuição de trabalho usando buckets
+
+** 3. OpenMP - Versão Thread IDs
+   - Divisão de trabalho explícita usando identificação de threads
+
+** 4. OpenMP - Versão SIMD
+   - Implementação com vetorização usando directiva #omp simd
+   - Otimização para instruções vetoriais no loop mais interno
+
+** 5. OpenMP - Versão Buckets + SIMD
+   - Combinação das estratégias de buckets com vetorização SIMD
+
+* Compilação
+** Sistema de Build
+   - Projeto utiliza CMake para configuração multiplataforma
+   - Suporte a compilação com OpenMP habilitado
+
+** Comandos de Compilação
+   #+BEGIN_SRC bash
+   mkdir build
+   cd build
+   cmake ..
+   make run_all
+   #+END_SRC
+
+* Verificação e Validação
+** Método de Verificação
+   - Comparação elemento por elemento com a versão serial usando md5sum
+
+** Método de Medição de Tempo
+   - Uso da função omp_get_wtime()
+
+* Próximas Etapas
+** Definindo....
+   
+

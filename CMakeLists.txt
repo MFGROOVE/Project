@@ -19,8 +19,8 @@ target_link_libraries(multiply_id PRIVATE matrix_functions OpenMP::OpenMP_C)
 add_executable(multiply_bucket src/main_bucket.c)
 target_link_libraries(multiply_bucket PRIVATE matrix_functions OpenMP::OpenMP_C)
 
-add_executable(multiply_simd src/main_simd.c)
-target_link_libraries(multiply_simd PRIVATE matrix_functions OpenMP::OpenMP_C)
+add_executable(multiply_bucket_simd src/main_bucket_simd.c)
+target_link_libraries(multiply_bucket_simd PRIVATE matrix_functions OpenMP::OpenMP_C)
 
 add_executable(multiply_id_simd src/main_id_simd.c)
 target_link_libraries(multiply_id_simd PRIVATE matrix_functions OpenMP::OpenMP_C)
@@ -31,10 +31,10 @@ target_link_libraries(multiply_sequencial PRIVATE matrix_functions OpenMP::OpenM
 add_custom_target(run_all
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_id
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_bucket
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_simd
+    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_bucket_simd
     COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_id_simd
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_sequencial 
+    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_sequencial
 )
 
-add_dependencies(run_all multiply_id multiply_bucket multiply_simd multiply_id_simd multiply_sequencial)
+add_dependencies(run_all multiply_id multiply_bucket multiply_bucket_simd multiply_id_simd multiply_sequencial)
 
