@@ -4,13 +4,20 @@
 #include <stdlib.h>
 #include <time.h>
 
-int main() {
-  srand(42); /* As matrizes são aleátorias,mas,
-   são controladas pela seed,
-   assim todos os algoritmos realizam a multiplicação com a mesma matriz */
-  int (*matrix_a)[N] = malloc(sizeof(int[N][N]));
-  int (*matrix_b)[N] = malloc(sizeof(int[N][N]));
-  int (*matrix_c)[N] = malloc(sizeof(int[N][N]));
+int main(int argc, char **argv) {
+  if (argc < 3) {
+    printf("Faltam argumentos para o codigo. Os argumentos são:\n1) numero de "
+           "threads\n2) tamanho da matriz\n");
+    return 1;
+  }
+
+  srand(42);
+
+  int num_threads = atoi(argv[1]);
+  int S = atoi(argv[2]); // N foi substituído por S
+  int (*matrix_a)[S] = malloc(sizeof(int[S][S]));
+  int (*matrix_b)[S] = malloc(sizeof(int[S][S]));
+  int (*matrix_c)[S] = malloc(sizeof(int[S][S]));
 
   fill_random_matrix(matrix_a);
   fill_random_matrix(matrix_b);
@@ -18,14 +25,16 @@ int main() {
 
   double start_time = omp_get_wtime();
 
+  omp_set_num_threads(num_threads);
+
 #pragma omp parallel
   {
     int n = omp_get_num_threads();
     int id = omp_get_thread_num();
 
-    for (int i = id; i < N; i += n) {
-      for (int j = 0; j < N; j++) {
-        for (int k = 0; k < N; k++) {
+    for (int i = id; i < S; i += n) {
+      for (int j = 0; j < S; j++) {
+        for (int k = 0; k < S; k++) {
           matrix_c[i][j] += matrix_a[i][k] * matrix_b[k][j];
         }
       }
@@ -34,15 +43,20 @@ int main() {
 
   double end_time = omp_get_wtime();
   printf("Tempo de execucao (metodo ID): %f segundos\n", end_time - start_time);
+
+  double time = end_time - start_time;
+
   free(matrix_a);
   free(matrix_b);
+
   FILE *file = fopen("Metodo_id", "w");
-  for (size_t x = 0; x < N; x++) {
-    for (size_t y = 0; y < N; y++) {
+  for (size_t x = 0; x < S; x++) {
+    for (size_t y = 0; y < S; y++) {
       fwrite(&matrix_c[x][y], sizeof(int), 1, file);
     }
   }
-
+  fclose(file);
+  printf("%f", time);
   free(matrix_c);
   return 0;
 }
