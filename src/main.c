@@ -9,15 +9,15 @@ int main(int argc, char **argv) {
     printf("Falta o numero da matriz");
     return 1;
   }
-  int S = atoi(argv[2]);
+  int S = atoi(argv[1]);
 
   srand(42);
   int (*matrix_a)[S] = malloc(sizeof(int[S][S]));
   int (*matrix_b)[S] = malloc(sizeof(int[S][S]));
   int (*matrix_c)[S] = malloc(sizeof(int[S][S]));
-  fill_random_matrix(matrix_a);
-  fill_random_matrix(matrix_b);
-  zero_matrix(matrix_c);
+  fill_random_matrix(S, matrix_a);
+  fill_random_matrix(S, matrix_b);
+  zero_matrix(S, matrix_c);
 
   double start_time = omp_get_wtime();
 
@@ -38,8 +38,8 @@ int main(int argc, char **argv) {
   free(matrix_b);
 
   FILE *file = fopen("resultado_sequencial", "w");
-  for (size_t x = 0; x < N; x++) {
-    for (size_t y = 0; y < N; y++) {
+  for (size_t x = 0; x < S; x++) {
+    for (size_t y = 0; y < S; y++) {
       fwrite(&matrix_c[x][y], sizeof(int), 1, file);
     }
   }

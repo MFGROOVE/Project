@@ -22,9 +22,9 @@ int main(int argc, char **argv) {
   /* tive que declarar as matrizes na heap porque estava dando segmentation
    * fault*/
 
-  fill_random_matrix(matrix_a);
-  fill_random_matrix(matrix_b);
-  zero_matrix(matrix_c);
+  fill_random_matrix(S, matrix_a);
+  fill_random_matrix(S, matrix_b);
+  zero_matrix(S, matrix_c);
 
   double start_time = omp_get_wtime();
   omp_set_num_threads(num_threads);

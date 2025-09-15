@@ -1,8 +1,8 @@
 #ifndef MATRIX_FUNCTIONS_H
 #define MATRIX_FUNCTIONS_H
 
-#define N 1000
-void fill_random_matrix(int matrix[N][N]);
-void zero_matrix(int matrix[N][N]);
-char *convert_to_string(int matrix[N][N]);
+void fill_random_matrix(int S, int matrix[S][S]);
+void zero_matrix(int S, int matrix[S][S]);
+char *convert_to_string(int S, int matrix[S][S]);
+
 #endif
