@@ -19,9 +19,9 @@ int main(int argc, char **argv) {
   int (*matrix_b)[S] = malloc(sizeof(int[S][S]));
   int (*matrix_c)[S] = malloc(sizeof(int[S][S]));
 
-  fill_random_matrix(matrix_a);
-  fill_random_matrix(matrix_b);
-  zero_matrix(matrix_c);
+  fill_random_matrix(S, matrix_a);
+  fill_random_matrix(S, matrix_b);
+  zero_matrix(S, matrix_c);
 
   double start_time = omp_get_wtime();
 
