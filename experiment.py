@@ -3,6 +3,7 @@ import subprocess
 import os
 import sys
 import re
+from typing import Text
 
 STRATEGY_TO_EXECUTABLE_MAP = {
     "sequencial": "multiply_sequencial",
@@ -18,10 +19,13 @@ STRATEGY_TO_EXECUTABLE_MAP = {
 SINGLE_ARG_EXECUTABLES = ["multiply_sequencial"]
 BUILD_DIR = "build"
 INPUT_CSV = "input.csv"
-OUTPUT_CSV = "resultados.csv"
-STRATEGY_COLUMN_INDEX = 1
-THREADS_COLUMN_INDEX = 2
-DIMENSIONS_COLUMN_INDEX = 3
+id_command = 'echo "$(hostname)-$(date +%F)-$(date +%T)"'
+result_command = subprocess.run(id_command, capture_output=True, text=True, shell=True)
+OUTPUT_CSV = result_command.stdout.strip() + ".csv"
+STRATEGY_COLUMN_INDEX = 0
+THREADS_COLUMN_INDEX = 1
+DIMENSIONS_COLUMN_INDEX = 2
+BINARIES_RESULTS = "Binaries_results"
 
 
 def build_with_cmake():
@@ -37,35 +41,32 @@ def build_with_cmake():
         "-DCMAKE_BUILD_TYPE=Release",
     ]
     cmake_build_cmd = ["cmake", "--build", BUILD_DIR]
+    try:
+        os.mkdir(BINARIES_RESULTS)
+    except Exception as e:
+        print(f"Erro:{e}")
 
     try:
-        print(f"Configurando CMake... (Comando: {' '.join(cmake_configure_cmd)})")
         result = subprocess.run(
             cmake_configure_cmd, capture_output=True, text=True, check=False
         )
         if result.returncode != 0:
-            print(f"!!!!!! ERRO ao configurar CMake !!!!!!\nStderr:\n{result.stderr}")
+            print(f"erro ao configurar CMake\nStderr:\n{result.stderr}")
             sys.exit(1)
 
-        print(f"Compilando o projeto... (Comando: {' '.join(cmake_build_cmd)})")
         result = subprocess.run(
             cmake_build_cmd, capture_output=True, text=True, check=False
         )
         if result.returncode != 0:
-            print(f"!!!!!! ERRO ao compilar o projeto !!!!!!\nStderr:\n{result.stderr}")
+            print(f"ERRO compilando\nStderr:\n{result.stderr}")
             sys.exit(1)
-        print("Projeto compilado com sucesso.")
+        print("Projeto compilado")
     except Exception as e:
         print(f"Ocorreu um erro inesperado durante o build: {e}")
         sys.exit(1)
 
     print("--- Build Finalizado ---\n")
     return True
-
-
-def parse_dimension(dimension_str):
-    match = re.search(r"\d+", dimension_str)
-    return match.group(0) if match else dimension_str
 
 
 def run_benchmarks():
@@ -90,11 +91,7 @@ def run_benchmarks():
 
                 strategy_name = row[STRATEGY_COLUMN_INDEX].strip().lower()
                 num_threads = row[THREADS_COLUMN_INDEX].strip()
-                dimension_val = parse_dimension(row[DIMENSIONS_COLUMN_INDEX].strip())
-
-                print(
-                    f"\nLinha {i+2}: Estratégia='{strategy_name}', Threads={num_threads}, Dimensão={dimension_val}"
-                )
+                dimension_val = row[DIMENSIONS_COLUMN_INDEX].strip()
 
                 executable_name = STRATEGY_TO_EXECUTABLE_MAP.get(strategy_name)
 
@@ -120,7 +117,6 @@ def run_benchmarks():
                         )
                         execution_time = result.stdout.strip().split("\n")[-1]
                         result_time = execution_time
-                        print(f"     Resultado obtido: {result_time}")
                     except FileNotFoundError:
                         print(f"ERRO: Executável não encontrado: {exe_path}")
                         result_time = "ERRO_NAO_ENCONTRADO"
