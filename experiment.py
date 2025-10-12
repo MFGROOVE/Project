@@ -2,8 +2,6 @@ import csv
 import subprocess
 import os
 import sys
-import re
-from typing import Text
 
 STRATEGY_TO_EXECUTABLE_MAP = {
     "sequencial": "multiply_sequencial",
@@ -14,9 +12,11 @@ STRATEGY_TO_EXECUTABLE_MAP = {
     "buckets": "multiply_bucket",
     "id-simd": "multiply_id_simd",
     "buckets-simd": "multiply_bucket_simd",
+    "static-buckets":"multiply_static_bucket"
 }
 
 SINGLE_ARG_EXECUTABLES = ["multiply_sequencial"]
+FOUR_ARG_EXECUTABLES = ["multiply_static_bucket"]
 BUILD_DIR = "build"
 INPUT_CSV = "input.csv"
 id_command = 'echo "$(hostname)-$(date +%F)-$(date +%T)"'
@@ -25,6 +25,7 @@ OUTPUT_CSV = result_command.stdout.strip() + ".csv"
 STRATEGY_COLUMN_INDEX = 0
 THREADS_COLUMN_INDEX = 1
 DIMENSIONS_COLUMN_INDEX = 2
+SIZE_BUCKET_COLUMN_INDEX = 3
 BINARIES_RESULTS = "Binaries_results"
 
 
@@ -92,6 +93,7 @@ def run_benchmarks():
                 strategy_name = row[STRATEGY_COLUMN_INDEX].strip().lower()
                 num_threads = row[THREADS_COLUMN_INDEX].strip()
                 dimension_val = row[DIMENSIONS_COLUMN_INDEX].strip()
+                size_bucket = row[SIZE_BUCKET_COLUMN_INDEX].strip()
 
                 executable_name = STRATEGY_TO_EXECUTABLE_MAP.get(strategy_name)
 
@@ -103,6 +105,9 @@ def run_benchmarks():
                     if executable_name in SINGLE_ARG_EXECUTABLES:
                         command_to_run = [exe_path, dimension_val]
                         print(f"  -> Rodando '{executable_name}' (1 arg)...")
+                    elif executable_name in FOUR_ARG_EXECUTABLES :
+                        command_to_run = [exe_path,num_threads,dimension_val,size_bucket]
+                        print(f"  -> Rodando '{executable_name}' (3 args)...")
                     else:
                         command_to_run = [exe_path, num_threads, dimension_val]
                         print(f"  -> Rodando '{executable_name}' (2 args)...")
