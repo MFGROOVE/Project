@@ -13,6 +13,8 @@ include_directories(include)
 
 add_library(matrix_functions SHARED src/matrix_functions.c)
 
+add_executable(multiply_static_bucket  src/main_static_bucket.c)
+target_link_libraries(multiply_static_bucket PRIVATE matrix_functions OpenMP::OpenMP_C)
 add_executable(multiply_id src/main_id.c)
 target_link_libraries(multiply_id PRIVATE matrix_functions OpenMP::OpenMP_C)
 
@@ -28,13 +30,5 @@ target_link_libraries(multiply_id_simd PRIVATE matrix_functions OpenMP::OpenMP_C
 add_executable(multiply_sequencial src/main.c)
 target_link_libraries(multiply_sequencial PRIVATE matrix_functions OpenMP::OpenMP_C)
 
-add_custom_target(run_all
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_id
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_bucket
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_bucket_simd
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_id_simd
-    COMMAND ${CMAKE_CURRENT_BINARY_DIR}/multiply_sequencial
-)
 
-add_dependencies(run_all multiply_id multiply_bucket multiply_bucket_simd multiply_id_simd multiply_sequencial)
 
