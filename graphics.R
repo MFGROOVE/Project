@@ -6,7 +6,7 @@ plot_1000 <- csv |>
 ggplot(data = plot_1000, mapping = aes(x = threads, y = tempo, color = estrategias)) +
         geom_line() +
         geom_point() +
-        facet_wrap(~estrategias, nrow = 2) +
+        facet_wrap(~estrategias, nrow = 1) +
         labs(
                 title = "Desempenho por Número de Threads (Matriz 1000x1000)",
                 subtitle = "Comparação entre diferentes estratégias de paralelização",
@@ -20,7 +20,7 @@ plot_100 <- csv |>
 ggplot(data = plot_100, mapping = aes(x = threads, y = tempo, color = estrategias)) +
         geom_line() +
         geom_point() +
-        facet_wrap(~estrategias, nrow = 2) +
+        facet_wrap(~estrategias, nrow = 1) +
         labs(
                 title = "Desempenho por Número de Threads (Matriz 100x100)",
                 subtitle = "Comparação entre diferentes estratégias de paralelização",
@@ -34,7 +34,7 @@ plot_10 <- csv |>
 ggplot(data = plot_10, mapping = aes(x = threads, y = tempo, color = estrategias)) +
         geom_line() +
         geom_point() +
-        facet_wrap(~estrategias, nrow = 2) +
+        facet_wrap(~estrategias, nrow = 1) +
         labs(
                 title = "Desempenho por Número de Threads (Matriz 10x10)",
                 subtitle = "Comparação entre diferentes estratégias de paralelização",
