@@ -13,7 +13,8 @@ ggplot(data = plot_1000, mapping = aes(x = threads, y = tempo, color = estrategi
                 x = "Número de Threads",
                 y = "Tempo de Execução (segundos)",
                 color = "Estratégia"
-        )
+        ) +
+    ylim(0, NA)
 
 plot_100 <- csv |>
         filter(dimensoes.N.X.N. == 100)
@@ -27,7 +28,8 @@ ggplot(data = plot_100, mapping = aes(x = threads, y = tempo, color = estrategia
                 x = "Número de Threads",
                 y = "Tempo de Execução (segundos)",
                 color = "Estratégia"
-        )
+        ) +
+    ylim(0, NA)
 
 plot_10 <- csv |>
         filter(dimensoes.N.X.N. == 10)
@@ -41,4 +43,5 @@ ggplot(data = plot_10, mapping = aes(x = threads, y = tempo, color = estrategias
                 x = "Número de Threads",
                 y = "Tempo de Execução (segundos)",
                 color = "Estratégia"
-        )
+        ) +
+    ylim(0, NA)
